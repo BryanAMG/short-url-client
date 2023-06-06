@@ -1,4 +1,5 @@
 'use client'
+import axios from 'axios'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 export const AuthContext = createContext()
@@ -12,12 +13,21 @@ export default function Auth({ children }) {
   }
 
   useEffect(() => {
-    const refreshToken = setTimeout(() => {
-      console.log('reshesh Token ')
-      // setToken(crypto.randomUUID())
-    }, 10000)
-    console.log('token :V ')
-    return () => clearTimeout(refreshToken)
+    axios.get('http://localhost:5000/api/v1/auth/refresh')
+      .then(({ data }) => {
+        console.log(data)
+      })
+      .catch((error) => {
+        console.log({ error })
+      })
+    // gerson123@gmail.com
+    // Gerson123
+    // const refreshToken = setTimeout(() => {
+    //   console.log('reshesh Token ')
+    //   // setToken(crypto.randomUUID())
+    // }, 10000)
+
+    // return () => clearTimeout(refreshToken)
   }, [token])
 
   return (
