@@ -1,3 +1,5 @@
+import { patternEmail } from './constans'
+
 export const validateUrl = ({ url }) => {
   try {
     const response = new URL(url)
@@ -7,3 +9,5 @@ export const validateUrl = ({ url }) => {
     return false
   }
 }
+
+export const validateEmail = ({ email }) => email.match(patternEmail) == null

@@ -1,5 +1,5 @@
 'use client'
-import { validateUrl } from '@/utils/validateUrl'
+import { validateUrl } from '@/utils/validateFunctions'
 import { useEffect, useRef, useState } from 'react'
 
 export default function EditInput({ title, setTitle }) {
