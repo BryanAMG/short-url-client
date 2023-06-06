@@ -1,3 +1,4 @@
+import { validateEmail } from '@/utils/validateFunctions'
 import { useEffect, useRef, useState } from 'react'
 
 export default function useInput({ type = 'text' }) {
@@ -12,20 +13,35 @@ export default function useInput({ type = 'text' }) {
     }
 
     if (input === '') {
-      setError('El campo no acepta vacio')
-      isfirstRender.current = true
+      setError('El campo no acepta valores vacios')
       return
     }
-    if (input.length < 5) {
-      setError('Debe tener más de 5 caracteres')
-      return
-    }
-    // password
+
     if (type === 'password') {
-      if (input.match(/^\d+$/)) {
+      if (input.length < 7) {
+        setError('Debe tener más de 6 caracteres')
+        return
+      }
+      if (input.match(/\d/) == null) {
         setError('Debe incluir al menos un numero')
         return
       }
+      if (input.match(/[A-Z]/) == null) {
+        setError('Debe incluir al menos una mayuscula')
+        return
+      }
+    }
+
+    if (type === 'email') {
+      if (validateEmail({ email: input })) {
+        setError('Debe tener formato email')
+        return
+      }
+    }
+
+    if (input.length < 6) {
+      setError('Debe tener más de 5 caracteres')
+      return
     }
 
     setError(null)
