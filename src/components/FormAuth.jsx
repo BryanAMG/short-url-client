@@ -46,6 +46,8 @@ export default function FormAuth({ isRegister }) {
     try {
       const { data } = await axios.post('http://localhost:5000/api/v1/auth/login', {
         email, password
+      }, {
+        withCredentials: true
       })
       console.log({ data })
       toast.success('Cuenta logueada correctamente')
