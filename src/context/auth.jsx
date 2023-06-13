@@ -1,44 +1,56 @@
 'use client'
 import axios from 'axios'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 export const AuthContext = createContext()
 
 export default function Auth({ children }) {
-  const [token, setToken] = useState(null)
-  // const [user, setUser] = useState(null)
-
-  const handleToken = ({ newToken }) => {
-    setToken(newToken)
-  }
+  const [dataToken, setTokenData] = useState(null)
+  const [user, setUser] = useState(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/v1/auth/refresh')
-      .then(({ data }) => {
-        console.log(data)
-      })
-      .catch((error) => {
+    async function checkToken () {
+      try {
+        const { data } = await axios.get('http://localhost:5000/api/v1/auth/refresh', { withCredentials: true })
+        if (!data?.token) return
+        setTokenData(data.token)
+      } catch (error) {
         console.log({ error })
-      })
+        setTokenData(null)
+      }
+    }
+    checkToken()
+  }, [])
+
+  useEffect(() => {
+    if (!dataToken) return
+    async function checkLogin () {
+      try {
+        const { data } = await axios.get('http://localhost:5000/api/v1/auth/profile', {
+          headers: {
+            Authorization: `Bearer ${dataToken}`
+          }
+        })
+        if (!data?.email) return
+        setUser(data)
+        setIsAuthenticated(true)
+      } catch (error) {
+        console.log({ error })
+        setIsAuthenticated(false)
+        setUser(null)
+      } finally {
+        setReady(true)
+      }
+    }
+    checkLogin()
     // gerson123@gmail.com
     // Gerson123
-    // const refreshToken = setTimeout(() => {
-    //   console.log('reshesh Token ')
-    //   // setToken(crypto.randomUUID())
-    // }, 10000)
-
-    // return () => clearTimeout(refreshToken)
-  }, [token])
-
+  }, [dataToken])
   return (
-    <AuthContext.Provider value={{ token, handleToken }}>
+    <AuthContext.Provider value={{ dataToken, user, isAuthenticated, ready }}>
       {children}
     </AuthContext.Provider>
   )
-}
-
-export const useAuth = () => {
-  const dataAuth = useContext(AuthContext)
-  if (dataAuth === undefined) throw new Error('useAuth must be used within a AuthProvider ')
-  return { ...dataAuth }
 }
