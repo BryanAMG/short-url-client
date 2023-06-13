@@ -9,7 +9,7 @@ export default function Home() {
           <h2> </h2>
         </div>
         <picture className='absolute inset-0 '>
-          <Image src={backImage} alt='back-ground' className='h-full w-full object-cover' />
+          <Image src={backImage} alt='back-ground' className='h-full w-full object-cover' priority />
         </picture>
       </article>
     </div>
