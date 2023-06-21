@@ -18,7 +18,7 @@ export default function Auth({ children }) {
         setTokenData(data.token)
       } catch (error) {
         console.log({ error })
-        setTokenData(null)
+        setReady(true)
       }
     }
     checkToken()
@@ -26,6 +26,7 @@ export default function Auth({ children }) {
 
   useEffect(() => {
     if (!dataToken) return
+
     async function checkLogin () {
       try {
         const { data } = await axios.get('http://localhost:5000/api/v1/auth/profile', {
@@ -49,7 +50,7 @@ export default function Auth({ children }) {
     // Gerson123
   }, [dataToken])
   return (
-    <AuthContext.Provider value={{ dataToken, user, isAuthenticated, ready }}>
+    <AuthContext.Provider value={{ dataToken, user, isAuthenticated, ready, setTokenData, setUser }}>
       {children}
     </AuthContext.Provider>
   )
