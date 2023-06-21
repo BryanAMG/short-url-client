@@ -11,3 +11,5 @@ export const validateUrl = ({ url }) => {
 }
 
 export const validateEmail = ({ email }) => email.match(patternEmail) == null
+
+export const getFirstName = ({ fullname }) => fullname.split(' ')[0].toUpperCase()
