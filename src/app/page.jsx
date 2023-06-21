@@ -6,7 +6,6 @@ export default function Home() {
       <article className='w-3/4  h-80  relative grid place-items-center'>
         <div className='z-10 relative bg-white/5  px-10 py-6 rounded-md'>
           <h1> Acortador de Url </h1>
-          <h2> </h2>
         </div>
         <picture className='absolute inset-0 '>
           <Image src={backImage} alt='back-ground' className='h-full w-full object-cover' priority />
