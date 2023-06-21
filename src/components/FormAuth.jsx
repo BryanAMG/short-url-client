@@ -6,11 +6,13 @@ import Link from 'next/link'
 import useInput from '@/hooks/useInput'
 import { useRouter } from 'next/navigation'
 import { verifyError } from '@/utils/constans'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function FormAuth({ isRegister }) {
   const [username, setUsername, errorUser] = useInput({ type: 'text' })
   const [email, setEmail, errorEmail] = useInput({ type: 'email' })
   const [password, setPassword, errorPassowrd] = useInput({ type: 'password' })
+  const { setTokenData } = useAuth()
   const router = useRouter()
 
   const titleLabel = isRegister ? 'Crea tu cuenta' : 'Logueate'
@@ -49,14 +51,12 @@ export default function FormAuth({ isRegister }) {
       }, {
         withCredentials: true
       })
-      console.log({ data })
-      toast.success('Cuenta logueada correctamente')
+      setTokenData(data.token)
+      router.push('/')
     } catch (error) {
       const errorMsg = error?.response?.data?.error || verifyError[error.code]
       toast.error(errorMsg)
     }
-    console.log('login', { router })
-    // router.push('/shorts')
   }
 
   return (
